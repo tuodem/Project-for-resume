@@ -1,0 +1,80 @@
+//The program is to take a string and change each letter to hide its original message
+#include <stdio.h>
+#include <string.h>
+//macro for the amount in the string array no more than 1000
+#define LENGTH 999
+int read_line(char *str, int n);
+
+void encrypt(char *message, char *encrypted_message, int *date, int n);
+int main(){
+	
+	char msg[LENGTH+1];
+	char encrypted_msg[LENGTH+1];
+	int date[8];
+	
+	printf("Enter the message: ");
+	//call to read_line function
+	read_line(msg, LENGTH+1);
+	printf("Enter date in the format of 8 digits: "); 
+	for (int i = 0; i<8;i++){
+		scanf("%1d", &date[i]);
+	}
+	//call to the void encrypt function
+	encrypt(msg, encrypted_msg, date, 8);
+	printf("%s\n",encrypted_msg);
+	return 0;
+
+
+
+}
+//function that we got from class
+int read_line(char *str, int n)
+{
+          int ch; int i = 0;
+
+          while ((ch = getchar()) != '\n')
+          {  if (i < n)
+             { *str++= ch;
+	      i++;
+             }
+	  }
+          *str = '\0';   
+          return i;      
+}
+//void function that changes each letter to hide is original message
+void encrypt(char *message, char *encrypted_message, int *date, int n){
+
+	char *m = message;
+	char *em = encrypted_message;
+	int *d = date;
+	//this part allows white space and changes the letters that were entered
+	while(*m != '\0'){
+		//if statements check if the letter is uppercase then encrypts and increments the date array
+		if (*m >= 'A' && *m <= 'Z'){
+			*em = (((*m - 'A')+*d)%26)+'A';
+			d++;
+		}
+		
+		else if (*m >= 'a' && *m <= 'z'){
+			*em = (((*m-'a')+*d)%26)+'a';
+			d++;
+		}
+		//this statement is for white space to allow the other words to be printed
+		else
+			*em = *m;
+		//this is to reset the date array for if the statement is longer than the amount of numbers in this array
+		if (d - date == n)
+			d = date;	
+
+	
+	m++;
+	em++;
+
+
+
+	}
+	//null statement to end the string array 
+	*em = '\0';
+
+}
+
