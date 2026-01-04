@@ -27,7 +27,7 @@ int main(){
 
 
 }
-//function that we got from class
+//function to take input of the message inputed and adds it to the msg array 
 int read_line(char *str, int n)
 {
           int ch; int i = 0;
