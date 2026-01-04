@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 #define length 1000
 #define max 100
@@ -15,12 +16,13 @@ struct student{
 //calling functions to be used
 int read_line(char str[], int n);
 void assign_level(struct student list[], int n);
+
+int compare_strings(const void *p, const void *q);
 int main(){
 	struct student list[length];
 	char arr[max+1];
 	
 	printf("Enter file name: ");
-
 	int count = 0;
 	//sends the arr of the file to read_line to read the name of file sent
 	read_line(arr,max);
@@ -45,6 +47,8 @@ int main(){
 		printf("Error writing result file\n");
 		return 1;
 	}
+	//qsort takes the struct student list the amount of students in the list, the size needed for the function compare_strings in  the function pointer that puts the students in order by points
+	qsort(list, count, sizeof(struct student), compare_strings);
 	//puts the contents of the list into the new file
 	for (int i = 0; i<count; i++){
 
@@ -84,3 +88,9 @@ void assign_level(struct student list[], int n){
 
 	}
 }
+//this function takes the pointers of the struct student and sorts them in order from least to greatest
+int compare_strings(const void *p, const void *q){
+	const struct student *s1 = (const struct student*)p;
+	const struct student *s2 = (const struct student*)q;
+ 	return s1->points - s2->points;
+}	
