@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#define length 1000
+#define max 100
+// struct for the file to store the name, points and levels
+struct student{
+
+	char first_name[max+1];
+	char last_name[max+1];
+	int points;
+	int level;
+};
+//calling functions to be used
+int read_line(char str[], int n);
+void assign_level(struct student list[], int n);
+int main(){
+	struct student list[length];
+	char arr[max+1];
+	
+	printf("Enter file name: ");
+
+	int count = 0;
+	//sends the arr of the file to read_line to read the name of file sent
+	read_line(arr,max);
+	FILE* fp = fopen(arr,"r");
+	if (fp == NULL){
+		printf("Error opening file\n");
+		return 1;
+	}	 
+	//scans the info of the file to the struct list
+	while(fscanf(fp, "%[^,],%[^,],%d\n",list[count].first_name, list[count].last_name, &list[count].points)==3){
+		count++;
+	}
+	
+	fclose(fp);
+	
+	//sends the data of the list to assign level to put each student in the level for their points
+ 	assign_level(list,count);
+
+	FILE* result_file = fopen("result.csv", "w");
+	
+	if (result_file == NULL){
+		printf("Error writing result file\n");
+		return 1;
+	}
+	//puts the contents of the list into the new file
+	for (int i = 0; i<count; i++){
+
+		fprintf(result_file, "%s, %s, %d, %d\n",list[i].first_name, list[i].last_name, list[i].points, list[i].level);
+	}
+	//output needed for the project to signify its done
+	printf("Output file: result.csv\n");
+	return 0;
+	fclose(result_file);
+}
+
+//readline function from the inventory.c file
+int read_line(char str[], int n){
+	int ch; int i = 0;
+    while(isspace(ch = getchar())) 
+	    ;
+    *str++ = ch;
+
+	while ((ch = getchar()) != '\n'){ 
+		 if (i < n){
+			 *str++= ch;
+	     		 i++;
+             }
+	  }
+          *str = '\0';   /* terminates string */
+          return i;        /* number of characters stored */
+}
+void assign_level(struct student list[], int n){
+	//increments though the points for each student to be assigned a level
+	for(int i = 0; i < n;i++){
+		if (list[i].points >= 0 && list[i].points <= 50)
+			list[i].level = 1;
+		else if (list[i].points >= 51 && list[i].points <= 95)
+			list[i].level = 2;
+		else
+			list[i].level = 3;
+
+	}
+}
